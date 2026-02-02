@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine App 💖</title>
+<style>
+body {
+    margin:0;
+    font-family: Arial, sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    background: linear-gradient(135deg,#ff758c,#ff7eb3);
+}
+
+.card {
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+
+h1 {
+    color:#ff4d6d;
+}
+
+button {
+    margin:10px;
+    padding:12px 25px;
+    border:none;
+    border-radius:30px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.yes {
+    background:#ff4d6d;
+    color:white;
+}
+
+.no {
+    background:#ddd;
+}
+
+#response {
+    margin-top:20px;
+    font-size:20px;
+    color:#ff4d6d;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Hello love, Will you be my Valentine date? 💕</h1>
+
+    <button class="yes" onclick="yesClicked()">Yes ❤️</button>
+    <button class="no" onclick="moveNo()">No 😅</button>
+
+    <div id="response"></div>
+</div>
+
+<script>
+function yesClicked(){
+    document.getElementById("response").innerHTML =
+    "Yay!!! 💖 See you on Valentine’s Day o kahit Sunday kasi may pasok ka haha";
+}
+
+function moveNo(){
+    const btn = document.querySelector(".no");
+    btn.style.position = "absolute";
+    btn.style.left = Math.random() * 80 + "%";
+    btn.style.top = Math.random() * 80 + "%";
+}
+</script>
+
+</body>
+</html>
