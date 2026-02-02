@@ -60,12 +60,14 @@ button {
     <button class="no" onclick="moveNo()">No 😅</button>
 
     <div id="response"></div>
+        <img id="valentineImg" src="Date.jpg">
 </div>
 
 <script>
 function yesClicked(){
     document.getElementById("response").innerHTML =
     "Yay!!! 💖 See you on Valentine’s Day o kahit Sunday kasi may pasok ka haha";
+    document.getElementById("valentineImg").style.display = "block";
 }
 
 function moveNo(){
