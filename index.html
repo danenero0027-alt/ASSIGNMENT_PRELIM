@@ -20,6 +20,16 @@ body {
     border-radius:20px;
     text-align:center;
     box-shadow:0 10px 30px rgba(0,0,0,0.2);
+    max-width:400px;
+
+    opacity:0;
+    transform: translateY(80px);
+    transition: all 1s ease-out;
+}
+
+.card.show {
+    opacity:1;
+    transform: translateY(0);
 }
 
 h1 {
@@ -33,6 +43,11 @@ button {
     border-radius:30px;
     font-size:16px;
     cursor:pointer;
+}
+
+button.big {
+    font-size:28px;
+    padding:20px 40px;
 }
 
 .yes {
@@ -49,39 +64,129 @@ button {
     font-size:20px;
     color:#ff4d6d;
 }
-    #valentineImg {
-    width:100%;
-    margin-top:15px;
-    border-radius:15px;
-    display:none;
-    }
+
+@keyframes fall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity:1; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity:0; }
+}
 </style>
 </head>
 <body>
 
-<div class="card">
-    <h1>Hello love, Will you be my Valentine date? 💕</h1>
-
-    <button class="yes" onclick="yesClicked()">Yes ❤️</button>
-    <button class="no" onclick="moveNo()">No 😅</button>
-
-    <div id="response"></div>
-  
-</div>
+<div class="card" id="card"></div>
 
 <script>
-function yesClicked(){
-    document.getElementById("response").innerHTML =
-    "Yay!!! 💖 See you on Valentine’s Day o kahit Sunday kasi may pasok ka haha";
+// Step counter
+let step = 1;
+let heartLoopStarted = false;
 
+// Render the card based on step
+function renderCard() {
+    const card = document.getElementById("card");
+    card.classList.remove('show');
+
+    let html = '';
+    if(step === 1){
+        html = `
+            <h1>Hello love, Bati na tayo🥺</h1>
+            <button class="yes" onclick="nextStep()">Yes ❤️</button>
+            <button class="no" onclick="moveNo()">No</button>
+            <div id="response"></div>
+        `;
+    } else if(step === 2){
+        html = `
+            <h1>Wala kang magagawa, Bati na tayo 😏</h1>
+            <button class="yes" onclick="nextStep()">Okay</button>
+        `;
+    } else if(step === 3){
+        html = `
+            <h1>Will you be my Valentine date? 💕</h1>
+            <button class="yes" onclick="finalYesClicked()">Yes ❤️</button>
+            <button class="no" onclick="moveNo()">No</button>
+            <div id="response"></div>
+        `;
+    }
+
+    card.innerHTML = html;
+    setTimeout(()=>card.classList.add('show'), 50);
 }
 
+// Go to next step
+function nextStep(){
+    step++;
+    renderCard();
+}
+
+// No button dodging
 function moveNo(){
     const btn = document.querySelector(".no");
-    btn.style.position = "absolute";
-    btn.style.left = Math.random() * 80 + "%";
-    btn.style.top = Math.random() * 80 + "%";
+    if(btn){
+        btn.style.position = "absolute";
+        btn.style.left = Math.random() * 80 + "%";
+        btn.style.top = Math.random() * 80 + "%";
+    }
 }
+
+// Final Yes click on Step 3
+function finalYesClicked(){
+    const card = document.getElementById("card");
+    card.classList.remove('show');
+
+    // Big Yay card with Yes button
+    card.innerHTML = `
+        <div id="response">Yay!!! 💖 See you on Valentine’s Day or Sunday kasi may pasok ka non</div>
+        <button class="yes big" onclick="triggerHearts()">Yes ❤️</button>
+    `;
+    setTimeout(()=>card.classList.add('show'), 50);
+
+    // Trigger large burst immediately
+    triggerHearts();
+
+    // Start continuous small hearts if not started
+    if(!heartLoopStarted){
+        heartLoopStarted = true;
+        setInterval(smallHeartLoop, 700); // continuous small hearts
+    }
+}
+
+// Trigger big burst hearts
+function triggerHearts(){
+    const hearts = ['❤️','💖','💘','💝','💞','💕'];
+    for(let i=0;i<50;i++){ // big burst
+        let heart = document.createElement("div");
+        heart.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+        heart.style.position = "fixed";
+        heart.style.fontSize = (Math.random()*25 + 15) + "px";
+        heart.style.left = Math.random()*100 + "%";
+        heart.style.top = "-50px";
+        heart.style.opacity = Math.random() * 0.8 + 0.3;
+        heart.style.transform = `rotate(${Math.random()*360}deg)`;
+        heart.style.pointerEvents = "none";
+        heart.style.animation = `fall ${3 + Math.random()*2}s linear forwards`;
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(), 5000 + Math.random()*2000);
+    }
+}
+
+// Small continuous hearts
+function smallHeartLoop(){
+    const hearts = ['❤️','💖','💘','💝','💞','💕'];
+    let heart = document.createElement("div");
+    heart.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+    heart.style.position = "fixed";
+    heart.style.fontSize = (Math.random()*20 + 15) + "px"; // smaller than burst
+    heart.style.left = Math.random()*100 + "%";
+    heart.style.top = "-50px";
+    heart.style.opacity = Math.random() * 0.6 + 0.3;
+    heart.style.transform = `rotate(${Math.random()*360}deg)`;
+    heart.style.pointerEvents = "none";
+    heart.style.animation = `fall ${4 + Math.random()*2}s linear forwards`;
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(), 5000 + Math.random()*2000);
+}
+
+// Initial render
+renderCard();
 </script>
 
 </body>
